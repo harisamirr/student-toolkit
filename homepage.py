@@ -74,8 +74,8 @@ class Homepage(ctk.CTk):
             ("Calculator", "calculator.py", True),
             ("Unit Converter", "unit_converter.py", True),
             ("GPA Calculator", "gpa_calculator.py", True),
-            ("Study Timer", "study_timer.py", False),
-            ("To-Do List", "todo_list.py", False),
+            ("Study Timer", "study_timer.py", True),
+            ("To-Do List", "todo_list.py", True),
         ]
 
         for col in range(2):
