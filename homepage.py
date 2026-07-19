@@ -76,7 +76,6 @@ class Homepage(ctk.CTk):
             ("GPA Calculator", "gpa_calculator.py", True),
             ("Study Timer", "study_timer.py", False),
             ("To-Do List", "todo_list.py", False),
-            ("Password Generator", "password_generator.py", False),
         ]
 
         for col in range(2):
