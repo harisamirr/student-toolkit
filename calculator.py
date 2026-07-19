@@ -142,10 +142,26 @@ class Calculator(ctk.CTk):
         print(f"ALPHA is now {'ON' if self.alpha_active else 'OFF'}")
 
     def _refresh_shift_labels(self):
-        """Swap button text between normal and SHIFT versions."""
-        for normal_label, button in self.shift_swap_buttons.items():
-            shown_label = self.SHIFT_LABELS[normal_label] if self.shift_active else normal_label
-            button.configure(text=shown_label)
+        """
+        Update button text to reflect the current SHIFT / hyp combination.
+        sin/cos/tan have FOUR possible labels depending on state; log, ln,
+        and √ only have two (normal vs SHIFT), since hyp doesn't apply to them.
+        """
+        for base_label, button in self.shift_swap_buttons.items():
+            button.configure(text=self._label_for(base_label))
+
+    def _label_for(self, base_label):
+        """Returns the label a button should currently show."""
+        if base_label in ("sin", "cos", "tan"):
+            if self.shift_active and self.hyp_active:
+                return {"sin": "sinh⁻¹", "cos": "cosh⁻¹", "tan": "tanh⁻¹"}[base_label]
+            if self.hyp_active:
+                return {"sin": "sinh", "cos": "cosh", "tan": "tanh"}[base_label]
+            if self.shift_active:
+                return self.SHIFT_LABELS[base_label]
+            return base_label
+        # log, ln, √: only SHIFT affects these, hyp doesn't apply
+        return self.SHIFT_LABELS[base_label] if self.shift_active else base_label
 
     # -----------------------------------------------------------------------
     # MAIN BUTTON GRID
@@ -260,6 +276,7 @@ class Calculator(ctk.CTk):
         # --- hyp: toggles hyperbolic mode for the NEXT sin/cos/tan press ---
         if label == "hyp":
             self.hyp_active = not self.hyp_active
+            self._refresh_shift_labels()
             print(f"hyp is now {'ON' if self.hyp_active else 'OFF'}")
             return
 
@@ -303,11 +320,19 @@ class Calculator(ctk.CTk):
             if self.shift_active:
                 self._append("²")
                 return
-        elif self.hyp_active and label in ("sin", "cos", "tan"):
-            func_text = f"{label}h("
-            self.hyp_active = False  # hyp only applies to the next press
-        elif self.shift_active and label in ("sin", "cos", "tan"):
-            func_text = f"a{label}("
+        elif label in ("sin", "cos", "tan"):
+            if self.shift_active and self.hyp_active:
+                func_text = f"a{label}h("       # e.g. asinh(
+                self.hyp_active = False          # hyp only applies to the next press
+                self._refresh_shift_labels()
+            elif self.hyp_active:
+                func_text = f"{label}h("         # e.g. sinh(
+                self.hyp_active = False
+                self._refresh_shift_labels()
+            elif self.shift_active:
+                func_text = f"a{label}("         # e.g. asin( (inverse trig, degrees)
+            else:
+                func_text = f"{label}("
         elif self.shift_active and label == "log":
             func_text = "10^("
         elif self.shift_active and label == "ln":
@@ -337,12 +362,19 @@ class Calculator(ctk.CTk):
         expr = expr.replace("^", "**")          # remaining x^y and x² uses
 
         expr = expr.replace("√(", "math.sqrt(")
-        expr = expr.replace("sinh(", "math.sinh(").replace("cosh(", "math.cosh(").replace("tanh(", "math.tanh(")
 
-        # Regex with a negative lookbehind: only match "sin(" when it is NOT
-        # immediately preceded by a letter. This is what actually prevents
-        # collisions between "sin(" and "asin(" -- plain string replacement
-        # can't tell those apart because "asin(" literally contains "sin(".
+        # All of these use the same negative-lookbehind trick: only match
+        # when NOT immediately preceded by a letter. This matters even more
+        # now, since "sinh(" is itself a substring of "asinh(" -- a plain
+        # .replace("sinh(", ...) would wrongly fire inside "asinh(" too.
+        # Doing every trig-family replacement this way means the order they
+        # run in no longer matters -- each one only matches a "clean" start.
+        expr = re.sub(r"(?<![A-Za-z])asinh\(", "math.asinh(", expr)
+        expr = re.sub(r"(?<![A-Za-z])acosh\(", "math.acosh(", expr)
+        expr = re.sub(r"(?<![A-Za-z])atanh\(", "math.atanh(", expr)
+        expr = re.sub(r"(?<![A-Za-z])sinh\(", "math.sinh(", expr)
+        expr = re.sub(r"(?<![A-Za-z])cosh\(", "math.cosh(", expr)
+        expr = re.sub(r"(?<![A-Za-z])tanh\(", "math.tanh(", expr)
         expr = re.sub(r"(?<![A-Za-z])asin\(", "dasin(", expr)
         expr = re.sub(r"(?<![A-Za-z])acos\(", "dacos(", expr)
         expr = re.sub(r"(?<![A-Za-z])atan\(", "datan(", expr)
