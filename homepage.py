@@ -72,7 +72,7 @@ class Homepage(ctk.CTk):
         # (Display name, script filename, whether it's built yet)
         tools = [
             ("Calculator", "calculator.py", True),
-            ("Unit Converter", "unit_converter.py", False),
+            ("Unit Converter", "unit_converter.py", True),
             ("GPA Calculator", "gpa_calculator.py", False),
             ("Study Timer", "study_timer.py", False),
             ("To-Do List", "todo_list.py", False),
