@@ -1,18 +1,3 @@
-"""
-Student Toolkit — GPA Calculator
-
-Calculates a weighted GPA on the standard US 4.0 scale:
-    GPA = sum(grade_points * credit_hours) / sum(credit_hours)
-
-This is included alongside IGCSE/A-Level tools because many students
-applying to US universities (MIT included) need to convert their grades
-into a GPA for applications, even if their school doesn't use GPA natively.
-
-Each course is one row: name (optional, just for your own reference),
-a letter grade, and credit hours. Rows can be added/removed freely,
-and the GPA recalculates live as you edit anything.
-"""
-
 import customtkinter as ctk
 
 ctk.set_appearance_mode("dark")

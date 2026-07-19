@@ -1,20 +1,3 @@
-"""
-Student Toolkit — Scientific Calculator (Phase 1)
-
-Handles both LAYOUT and LOGIC:
-- Display screen + full button grid
-- SHIFT toggles trig/log buttons to their inverse (sin -> sin^-1, log -> 10^x, etc.)
-- ALPHA reserved for future variable support (visual toggle only for now)
-- Real arithmetic, trig, log, memory, and factorial evaluation
-
-How evaluation works (important to understand, not just copy):
-We never call Python's raw eval() on whatever the user typed, because eval()
-will run ANY Python code it's given -- that's a security hole if this app
-ever reads input from outside the user (e.g. loading a saved file later).
-Instead we translate calculator symbols (×, ÷, π, sin, etc.) into a
-restricted set of math operations, then evaluate ONLY that restricted set.
-"""
-
 import math
 import re
 import customtkinter as ctk

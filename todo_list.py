@@ -1,18 +1,3 @@
-"""
-Student Toolkit — To-Do List
-
-Tasks persist between sessions by saving to a small JSON file
-(todo_data.json) next to this script. JSON was chosen over something like
-a database because the data here is simple (just a list of tasks), and a
-JSON file is human-readable -- you can open it in a text editor and see
-exactly what's stored, which is useful while you're still building this.
-
-Save strategy: rather than only saving when you close the window (risky --
-a crash would lose everything), we save immediately after every change
-(add, check off, delete). Slightly more disk writes, but zero risk of
-losing a task.
-"""
-
 import json
 import os
 import customtkinter as ctk

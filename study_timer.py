@@ -1,17 +1,3 @@
-"""
-Student Toolkit — Study Timer (Pomodoro)
-
-Standard Pomodoro technique: alternate focused work sessions with short
-breaks, and a longer break every 4th session.
-
-Key concept this file teaches: how to run a countdown WITHOUT freezing the
-GUI. We don't use a while-loop with time.sleep() -- that would block
-Tkinter's event loop entirely, so the window would stop responding to
-clicks while counting down. Instead we use self.after(1000, callback),
-which tells Tkinter "call this function again in 1000ms" and then returns
-control immediately -- the window stays fully responsive between ticks.
-"""
-
 import customtkinter as ctk
 
 ctk.set_appearance_mode("dark")

@@ -1,28 +1,3 @@
-"""
-Student Toolkit — Homepage
-
-This is the main entry point. It's a small launcher window with one button
-per tool. Clicking a button "spawns" that tool as its own separate window.
-
-Design decision worth understanding (not just accepting):
-Each widget (calculator, converter, etc.) is launched as its own SEPARATE
-PYTHON PROCESS via subprocess.Popen(), rather than as a second window
-inside this same program.
-
-Why, instead of just opening a second Tkinter window from here?
-- Tkinter is only designed to have ONE main "root" window per process.
-  Our calculator.py is built as a standalone root window (ctk.CTk) --
-  that's what let us build and test it completely on its own.
-- Running each widget as its own process means closing one widget (or even
-  it crashing) can NEVER take down the homepage or any other open widget.
-  That directly matches your goal: "runs smoothly in the background,"
-  since each piece is fully independent.
-- The tradeoff: slightly more RAM than a single-process app, since each
-  widget is its own Python interpreter. In practice this is still tiny
-  (a Tkinter window uses only a few MB), so it fits your "low RAM" goal
-  far better than a heavier GUI framework would.
-"""
-
 import subprocess
 import sys
 import os

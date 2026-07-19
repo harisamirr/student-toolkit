@@ -1,18 +1,3 @@
-"""
-Student Toolkit — Unit Converter
-
-Covers units commonly used in IGCSE/O-Level/A-Level Physics, Chemistry, and Maths.
-
-Design: every category (except Temperature) stores a "factor" that converts
-ONE unit of that thing into a shared BASE unit (e.g. for Length, the base is
-metres). To convert A -> B: multiply by A's factor to get the base value,
-then divide by B's factor. This means adding a new unit later is just one
-new dictionary entry -- no new conversion logic needed.
-
-Temperature can't use this trick (0°C != 0°F != 0K), so it gets its own
-small pair of functions instead.
-"""
-
 import customtkinter as ctk
 
 ctk.set_appearance_mode("dark")
